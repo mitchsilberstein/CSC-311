@@ -26,14 +26,14 @@ Ticket createTicket(char *line, Ticket ticket)
   int fifth;
   int powerball;
   int powerplay;
-  
+
   sscanf(line, "%s" "%d" "%d" "%d" "%d" "%d" "%d" "%d",
         drawDate, &first, &second, &third, &fourth, &fifth, &powerball, &powerplay);
   /**
   printf("%s %d %d %d %d %d %d %d\n",
         drawDate, first, second, third, fourth, fifth, powerball, powerplay);
   */
-  
+
   strcpy(ticket.drawDate, drawDate);
   ticket.first = first;
   ticket.second = second;
@@ -62,13 +62,13 @@ int main(int argc, char** argv)
     perror("calloc");
     return -1;
   }
-  
+
   char *line = NULL;
   size_t lengthOfBuffer = 0;
   ssize_t numberOfCharactersRead;
 
   FILE * inputStream = fopen("iowa-powerball.txt", "r");
-  
+
   numberOfCharactersRead = getline(&line, &lengthOfBuffer, inputStream);
 
   if (numberOfCharactersRead == -1)
@@ -97,13 +97,13 @@ int main(int argc, char** argv)
       i++;
     }
   }
-  
+
   fclose(inputStream);
-  
+
   free(line);
 
-  
-  for (int i = 0; i < 20; i++)
+
+  for (int i = WINNING_TICKETS; i > 0; i--)
   {
     printf("----------------------------------------------\n");
     printf("Ticket ID: %d\n", winningTickets[i].ticketID);
@@ -113,10 +113,30 @@ int main(int argc, char** argv)
 	   winningTickets[i].fourth, winningTickets[i].fifth);
     printf("Powerball: %d\n", winningTickets[i].powerball);
     printf("Power Play: %d\n", winningTickets[i].powerplay);
-    
+
   }
- 
+
+//calculating white ball frequency
+int lottoNum[70]={0};
+for (int i =0; i < WINNING_TICKETS; i++){
+  for (int j = 1; j < 70; j++){
+  if (winningTickets[i].first == j || winningTickets[i].second == j || winningTickets[i].third == j || winningTickets[i].fourth == j || winningTickets[i].fifth == j){
+    lottoNum[j] += 1;
+  } // if
+} // for
+}
+
+  for (int c = 1 ; c <= 69 ; c++){
+    printf("%d  -->  %d\n", c, lottoNum[c]);
+  } // for
+
+
+
+
+
+
+
   free(winningTickets);
-  
-  return 0;  
+
+  return 0;
 }
